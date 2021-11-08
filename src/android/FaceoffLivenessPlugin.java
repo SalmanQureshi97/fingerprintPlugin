@@ -167,14 +167,15 @@ public class FaceoffLivenessPlugin extends CordovaPlugin {
     }
 
     private void requestExternalStoragePermission() {
-        if (android.os.Build.VERSION.SDK_INT >= M) {
-            if (ContextCompat.checkSelfPermission(this,
+        Context context = cordova.getActivity().getApplicationContext();
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            if (ContextCompat.checkSelfPermission(context,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
 
-                ActivityCompat.requestPermissions(this,
+                ActivityCompat.requestPermissions(this.cordova.getActivity(),
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        Constants.EXTERNAL_STORAGE_CODE);
+                        11);
             }
         }
     }
