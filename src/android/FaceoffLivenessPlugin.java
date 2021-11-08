@@ -61,13 +61,13 @@ public class FaceoffLivenessPlugin extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("coolMethod")) {
             String message = args.getString(0);
-           
+            this.requestExternalStoragePermission();
             this.coolMethod(message, callbackContext);
             return true;
         }
         if (action.equals("unCoolMethod")) {
             String message = args.getString(0);
-           
+            this.requestExternalStoragePermission();
             this.unCoolMethod(message, callbackContext);
             return true;
         }
@@ -162,6 +162,19 @@ public class FaceoffLivenessPlugin extends CordovaPlugin {
                 // If not empty, show results
                 
                 System.out.println("Empty IDENTIFICATION response!");
+            }
+        }
+    }
+
+    private void requestExternalStoragePermission() {
+        if (android.os.Build.VERSION.SDK_INT >= M) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        Constants.EXTERNAL_STORAGE_CODE);
             }
         }
     }
