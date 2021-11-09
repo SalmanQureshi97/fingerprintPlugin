@@ -3,7 +3,7 @@
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.unikrew.faceoff"
+        applicationId "com.unikrew.fingerprint"
         minSdkVersion 18
         targetSdkVersion 28
         versionCode 1

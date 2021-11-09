@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Plugin for Unikew Fingerprint SDK",
   "cordova": {
-    "id": "com.unikrew.faceoff",
+    "id": "com.unikrew.fingerprint",
     "platforms": [
       "android"
     ]
