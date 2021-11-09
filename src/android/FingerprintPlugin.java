@@ -51,7 +51,7 @@ import org.json.JSONObject;
 /**
  * This class echoes a string called from JavaScript.
  */
-public class FaceoffLivenessPlugin extends CordovaPlugin {
+public class FingerprintPlugin extends CordovaPlugin {
 
     private static final String TAG = "HomeActivity";
     private static final int PERMISSION_REQUESTS = 1;
@@ -59,55 +59,23 @@ public class FaceoffLivenessPlugin extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equals("coolMethod")) {
+        if (action.equals("exportMethod")) {
             String message = args.getString(0);
             this.requestExternalStoragePermission();
-            this.coolMethod(message, callbackContext);
+            this.exportMethod(callbackContext);
             return true;
         }
-        if (action.equals("unCoolMethod")) {
-            String message = args.getString(0);
-            this.requestExternalStoragePermission();
-            this.unCoolMethod(message, callbackContext);
-            return true;
-        }
+        
         return false;
     }
 
-    private void unCoolMethod(String message, CallbackContext callbackContext) {
+    private void exportMethod(CallbackContext callbackContext) {
         Context context = cordova.getActivity().getApplicationContext();
-        if (message != null && message.length() > 0) {
-            
-            this.launchScanning(null, null, null, null, null, FingerprintConfig.Mode.EXPORT_WSQ);
-                
-            
-            // Toast toast = Toast.makeText(cordova.getActivity(), message,
-            // Toast.LENGTH_LONG );
-            // // Display toast
-            // toast.show();
-           
-            callbackContext.success(message);
-        } else {
-            callbackContext.error("Expected one non-empty string argument.");
-        }
+        this.launchScanning(null, null, null, null, null, FingerprintConfig.Mode.EXPORT_WSQ);
+        callbackContext.success("launched Scanning");
+        
     }
 
-    private void coolMethod(String message, CallbackContext callbackContext) {
-        Context context = cordova.getActivity().getApplicationContext();
-        if (message != null && message.length() > 0) {
-            
-            this.launchScanning(null, null, null, null, null, FingerprintConfig.Mode.IDENTIFY);
-            
-            // Toast toast = Toast.makeText(cordova.getActivity(), message,
-            // Toast.LENGTH_LONG );
-            // // Display toast
-            // toast.show();
-           
-            callbackContext.success(message);
-        } else {
-            callbackContext.error("Expected one non-empty string argument.");
-        }
-    }
     private void launchScanning(String name, String username, String password,
     String cnicNumber, NadraConfig nadraConfig, FingerprintConfig.Mode mode) {
         try {
@@ -118,12 +86,12 @@ public class FaceoffLivenessPlugin extends CordovaPlugin {
             // Fingerprint Config is used to customize the UI and fingerprint scanning options
             // See its usage in 'SettingsActivity' for details
             FingerprintConfig.Builder builder = new FingerprintConfig.Builder()
-            .setFingers(FingerprintConfig.Fingers.EIGHT_FINGERS)
-            .setMode(mode)
-            .setPackPng(true);
+                .setFingers(FingerprintConfig.Fingers.EIGHT_FINGERS)
+                .setMode(mode)
+                .setPackPng(true);
 
             if (nadraConfig != null) {
-            builder.setNadraConfig(nadraConfig);
+                builder.setNadraConfig(nadraConfig);
             }
 
             FingerprintConfig fingerprintConfig = builder.build(R.drawable.placeholder_logo, R.color.colorPrimary);
@@ -144,15 +112,13 @@ public class FaceoffLivenessPlugin extends CordovaPlugin {
             this.cordova.getActivity().startActivityForResult(intent, 22);
 
         } catch (LivenessNotSupportedException e) {
-            System.out.println( e.getMessage() + "HERE ASWELL");
+            System.out.println( e.getMessage());
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        System.out.println("AM I HERE");
         final int responseCode = data.getIntExtra("fingerprint_response_code", -1);
-        System.out.println(data + " CODE: " + responseCode);
         if (responseCode > 0) {
             FingerprintResponse fingerprintResponse = ResultIPC.getInstance().getFingerprintResponse(responseCode);
             if (fingerprintResponse != null && fingerprintResponse.getIdentificationResponse() != null) {
@@ -163,7 +129,7 @@ public class FaceoffLivenessPlugin extends CordovaPlugin {
                 // If not empty, show results
                 //fingerprintResponse.getPngList();
                 fingerprintResponse.getWsqList();
-                System.out.println("Empty IDENTIFICATION response!");
+                System.out.println("Response : " + fingerprintResponse.getWsqList());
             }
         }
     }

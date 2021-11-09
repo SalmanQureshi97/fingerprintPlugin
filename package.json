@@ -1,7 +1,7 @@
 {
-  "name": "FaceoffLivenessPlugin",
+  "name": "FingerprintPlugin",
   "version": "0.0.1",
-  "description": "Test Plugin for Unikew/faceoff/liveness/0.0.0.1.5",
+  "description": "Plugin for Unikew Fingerprint SDK",
   "cordova": {
     "id": "com.unikrew.faceoff",
     "platforms": [
@@ -12,6 +12,6 @@
     "ecosystem:cordova",
     "cordova-android"
   ],
-  "author": "Salman Qureshi",
+  "author": "Salman Qureshi/ Manish Kumar",
   "license": "MIT"
 }
