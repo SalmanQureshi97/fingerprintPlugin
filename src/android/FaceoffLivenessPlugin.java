@@ -151,16 +151,18 @@ public class FaceoffLivenessPlugin extends CordovaPlugin {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         System.out.println("AM I HERE");
-        final int responseCode = data.getIntExtra("ResponseCode", -1);
+        final int responseCode = data.getIntExtra("fingerprint_response_code", -1);
         System.out.println(data + " CODE: " + responseCode);
         if (responseCode > 0) {
             FingerprintResponse fingerprintResponse = ResultIPC.getInstance().getFingerprintResponse(responseCode);
             if (fingerprintResponse != null && fingerprintResponse.getIdentificationResponse() != null) {
                 // Initialize views and show person's data
+
                 System.out.println(fingerprintResponse.getIdentificationResponse());
             } else {
                 // If not empty, show results
-                
+                //fingerprintResponse.getPngList();
+                fingerprintResponse.getWsqList();
                 System.out.println("Empty IDENTIFICATION response!");
             }
         }
